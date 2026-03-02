@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Thumbnail Downloader</title>
+<meta name="description" content="Download YouTube video thumbnails in all resolutions instantly. Fast, free and secure tool.">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.container {
+  flex: 1;
+  text-align: center;
+  padding: 20px;
+}
+
+input {
+  width: 90%;
+  max-width: 500px;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+button {
+  margin-top: 15px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #ff4b2b;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #ff416c;
+}
+
+.results {
+  margin-top: 30px;
+  display: grid;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  width: 320px;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.card p {
+  margin: 10px 0;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  background: rgba(0,0,0,0.3);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+YouTube Thumbnail Downloader
+</header>
+
+<div class="container">
+  <p>Paste your YouTube video link below</p>
+  <input type="text" id="videoURL" placeholder="Enter YouTube URL here">
+  <br>
+  <button onclick="generateThumbnails()">Get Thumbnails</button>
+
+  <div class="results" id="results"></div>
+</div>
+
+<footer>
+Fully Developed by MASTER CODING ORGANISATION
+</footer>
+
+<script>
+function extractVideoID(url) {
+  if (url.includes("watch?v=")) {
+    return url.split("watch?v=")[1].split("&")[0];
+  } else if (url.includes("youtu.be/")) {
+    return url.split("youtu.be/")[1].split("?")[0];
+  } else if (url.includes("shorts/")) {
+    return url.split("shorts/")[1].split("?")[0];
+  }
+  return null;
+}
+
+function generateThumbnails() {
+  const url = document.getElementById("videoURL").value;
+  const videoID = extractVideoID(url);
+  const results = document.getElementById("results");
+  results.innerHTML = "";
+
+  if (!videoID) {
+    results.innerHTML = "<p>Invalid YouTube URL</p>";
+    return;
+  }
+
+  const qualities = [
+    { label: "Ultra HD", file: "maxresdefault.jpg" },
+    { label: "HD", file: "sddefault.jpg" },
+    { label: "High Quality", file: "hqdefault.jpg" },
+    { label: "Medium Quality", file: "mqdefault.jpg" },
+    { label: "Small", file: "default.jpg" }
+  ];
+
+  qualities.forEach(q => {
+    const imageURL = `https://img.youtube.com/vi/${videoID}/${q.file}`;
+
+    results.innerHTML += `
+      <div class="card">
+        <p>${q.label}</p>
+        <img src="${imageURL}" alt="Thumbnail">
+        <a href="${imageURL}" download>
+          <button>Download</button>
+        </a>
+      </div>
+    `;
+  });
+}
+</script>
+
+</body>
+</html>
